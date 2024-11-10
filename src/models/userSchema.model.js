@@ -1,4 +1,4 @@
-import  {mongoose, Schema } from "mongoose";
+import mongoose,{Schema} from "mongoose";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import crypto from 'crypto'
@@ -42,7 +42,8 @@ const userSchema = new Schema({
     role: {
         type: String,
         enum: ["user", "seller", "admin", "editor"],
-        lowercase: true
+        lowercase: true,
+        default: "user"
     },
     address:[
         { street:String }, { postalCode: String }, { district: String }, { country: String }

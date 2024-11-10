@@ -6,6 +6,7 @@ import { cloudinaryUpload } from "../services/cloudinary.js"
 import apiResponse from "quick-response"
 import crypto from 'crypto'
 import ApiResponse from "../utils/ApiResponse.js"
+import { forgotEmail } from "../utils/forgotEmail.js"
 
 
 const generateTokens = async (id) => {
@@ -139,7 +140,7 @@ const logout = async (req,res) => {
 }
 
 // forgot password
-const forgotPassword = async (req, res, next) => {
+const forgotPassword = async (req, res) => {
    // get user based on posted email
    const user = await User.findOne({ email: req.body.email })
    try {
@@ -151,16 +152,24 @@ const forgotPassword = async (req, res, next) => {
  
      // generate random reset token
      const resetToken = user.createPasswordResetToken()
+     console.log(resetToken)
+ 
+     //  await user.save()
+     // user.passwordResetToken = resetToken
      await user.save({ validateBeforeSave: false })
  
      // send it to user's email
      const resetURL = `${req.protocol}://${req.get(
        'host'
-     )}/api/v1/users/reset-password/${resetToken}`
+     )}/api/v1/reset-password/${resetToken}`
+ 
+     console.log(resetURL)
  
      const message = `Forgot your password? click to the link to update your password:${resetURL}.\nIf you didn't forget your password, please ignore this email`
  
-     await mail({
+     console.log(user.email)
+ 
+     await forgotEmail({
        email: user.email,
        html: message,
      })
@@ -169,6 +178,7 @@ const forgotPassword = async (req, res, next) => {
        .status(200)
        .json(apiResponse(200, 'Reset password link send to the email address'))
    } catch (error) {
+     console.log(error.message)
      user.passwordResetToken = undefined
      user.passwordResetExpires = undefined
      await user.save({ validateBeforeSave: false })

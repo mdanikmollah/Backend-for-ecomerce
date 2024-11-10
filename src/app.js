@@ -1,6 +1,11 @@
 import express from "express"
 import cors from "cors"
 import userRouter from "./routes/userRoute.route.js"
+import categoryRouter from "./routes/category.route.js"
+import subCategoryRouter from "./routes/subCategory.route.js"
+import productRouter from "./routes/product.route.js"
+import variationRouter from "./routes/variation.route.js"
+import inventoryRouter from "./routes/inventory.route.js"
 
 const app = express();
 
@@ -14,5 +19,11 @@ app.use(cors({
 }))
 
 app.use("/api/v1",userRouter)
+app.use("/api/v1",categoryRouter)
+app.use("/api/v1",subCategoryRouter)
+app.use("/api/v1",productRouter)
+app.use("/api/v1",variationRouter)
+app.use("/api/v1",inventoryRouter)
+
 
 export default app
