@@ -24,24 +24,32 @@ const generateTokens = async (id) => {
 }
 
 const createuser = async(req,res)=>{
+   const { displayName, email, password, phoneNumber, role } = req.body
+   console.log(req.body);
+   
    try {
-   const { displayName, email, password, phoneNumber } = req.body
   
    const isFound = await User.findOne({ email })
    //console.log(isFound);
    if (isFound) {
        return res.json("email ase")
    }
-   //const bpass = await bcrypt.hash(password, 10);
-   const user = await User.create({ displayName, email, password, phoneNumber })
+   let user
+   if (role) {
+       user = await User.create({ displayName, email, password, phoneNumber,role })
+   }else{
+      user = await User.create({ displayName, email, password, phoneNumber,role })
+   }
+
    const link = await user.generateAccessToken()
    console.log("she",link);
       
    await mail(user.email, "verification", "hello", verificationTemplate(link))
       
       
-   return res.json("ok")
+   return res.json(apiResponse(201,"user created",user))
    } catch (error) {
+      console.log("swds",error);
       
    }
 }
@@ -83,27 +91,27 @@ const login = async(req,res)=>{
       if ( req.body.hasOwnProperty("email") && req.body.hasOwnProperty("password") ) {
            
          if ([email,password].some((field)=>field === "")) {
-            return res.send("All field are required")
+            return res.json(apiResponse(401,"All field are required"))
          }
          }else{
    
-            return res.send("Invalid")
+            return res.json(apiResponse(401,"Invalid"))
          }
          const userFound = await User.findOne({email})
          if (!userFound) {
-            return res.send("email and password wrong")
+            return res.json(apiResponse(401,"email and worng password"))
          }
          const isPasswordCorrect = await userFound.cheakPassword(password)
          if (!isPasswordCorrect) {
-            return res.send("email and worng password")
+            return res.json(apiResponse(402,"email and worng password"))
          }
          if (!userFound.emailverified) {
-            return res.send("email is not verified,please cheak your email")
+            return res.json(apiResponse(400,"email is not verified,please cheak your email"))
          }
          const {accessToken,refreshToken} = await generateTokens(userFound._id)
          return res.json( apiResponse(200,"login", { accessToken, refreshToken }))
    } catch (error) {
-      console.log(error);
+      console.log("ddf",error);
       
    }
 }

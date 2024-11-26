@@ -5,7 +5,7 @@ import { upload } from "../middlewares/multer.middleware.js"
 import { auth } from "../middlewares/auth.middleware.js";
 const router = express.Router()
 
-router.route("/user").get(createuser)
+// router.route("/user").get(createuser)
 router.route("/user/create").post(validation, createuser)
 router.route("/user/:link").get(emailVerify)
 router.route("/user/logout").post(auth, logout)
