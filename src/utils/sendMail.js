@@ -6,7 +6,7 @@ const transporter = nodemailer.createTransport({
     secure: false, // use false for STARTTLS; true for SSL on port 465
     auth: {
       user: 'mdanik0178@gmail.com',
-      pass: 'fuqe egny xlkj cpmj',
+      pass: 'wxyq vbbn mqhm csrt',
     }
 });
 

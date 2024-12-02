@@ -13,11 +13,11 @@ export const auth = async (req,res,next) =>{
         })
 
         if (!decodedToken) {
-            return res.json("invalid token")
+            return res.json("invalid token1")
         }
         const user = await User.findById(decodedToken.id)
         if (!user) {
-            return res.json("invalid token")
+            return res.json("invalid token2")
         }
         req.user = user;
         next();

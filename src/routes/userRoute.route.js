@@ -6,9 +6,9 @@ import { auth } from "../middlewares/auth.middleware.js";
 const router = express.Router()
 
 // router.route("/user").get(createuser)
-router.route("/user/create").post(validation, createuser)
+router.route("/user/create").post(validation,createuser)
 router.route("/user/:link").get(emailVerify)
-router.route("/user/logout").post(auth, logout)
+router.route("/user/logout").post(auth,logout)
 router.route("/user/update").post(auth,upload.single("profilePic"),userUpdate)
 router.route("/user/login").post(login)
 router.route("/forgot-password").post(forgotPassword)

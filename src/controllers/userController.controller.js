@@ -26,7 +26,7 @@ const generateTokens = async (id) => {
 const createuser = async(req,res)=>{
    const { displayName, email, password, phoneNumber, role } = req.body
    console.log(req.body);
-   
+   //let userRole = role?role:"user"
    try {
   
    const isFound = await User.findOne({ email })
@@ -40,7 +40,7 @@ const createuser = async(req,res)=>{
    }else{
       user = await User.create({ displayName, email, password, phoneNumber,role })
    }
-
+   // let user = await User.create({displayName, email, password, phoneNumber, role:userRole})
    const link = await user.generateAccessToken()
    console.log("she",link);
       
@@ -108,8 +108,9 @@ const login = async(req,res)=>{
          if (!userFound.emailverified) {
             return res.json(apiResponse(400,"email is not verified,please cheak your email"))
          }
+         const user = await User.findById({_id:userFound._id}).select("-password")
          const {accessToken,refreshToken} = await generateTokens(userFound._id)
-         return res.json( apiResponse(200,"login", { accessToken, refreshToken }))
+         return res.json( apiResponse(200,"login", { user, accessToken, refreshToken }))
    } catch (error) {
       console.log("ddf",error);
       
