@@ -1,12 +1,18 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { unlinkSync } from 'fs'
+import { cloud_name, api_key, api_secret } from "../config/index.js"
 
+console.log("aas");
 
+// Ensure the API secret is available
+if (!api_secret || !api_key || !cloud_name) {
+    throw new Error("Cloudinary configuration is missing in environment variables.");
+}
     // Configuration
     cloudinary.config({ 
-        cloud_name: 'dwxut205e', 
-        api_key: '989562112188796', 
-        api_secret: 'e8Ry3iPsGtOgiobEIICwO8redV4' // Click 'View API Keys' above to copy your API secret
+        cloud_name, 
+        api_key, 
+        api_secret, // Click 'View API Keys' above to copy your API secret
     });
     
     export const cloudinaryUpload = async(path, public_id, folder)=>{

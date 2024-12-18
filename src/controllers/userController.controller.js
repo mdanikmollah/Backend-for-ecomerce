@@ -131,7 +131,7 @@ const userUpdate = async (req,res) => {
        }
     }
   } catch (error) {
-      console.log(error); 
+      console.log("err",error); 
   }
   
    
@@ -145,6 +145,19 @@ const logout = async (req,res) => {
       res.json(apiResponse(200,"Logout successfully done"))
    } catch (error) {
       console.log(error);
+   }
+}
+
+const getUser = async(req,res)=>{
+   console.log("asddf");
+   
+   try {
+      const { id } = req.params
+      const user = await User.findById({_id:id}).select("-password -refreshToken")
+      return res.json(apiResponse(200,"user details",user))
+   } catch (error) {
+      console.log(error);
+      
    }
 }
 
@@ -255,4 +268,4 @@ const forgotPassword = async (req, res) => {
    } catch (error) {}
  }
 
-export { createuser, emailVerify, login, logout, generateTokens, userUpdate, forgotPassword, resetPassword, updatePassword }
+export { createuser, emailVerify, login, logout, generateTokens, userUpdate, forgotPassword, resetPassword, updatePassword, getUser }

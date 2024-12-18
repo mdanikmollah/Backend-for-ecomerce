@@ -1,7 +1,7 @@
 import mongoose,{Schema} from "mongoose";
 const variationSchema = new Schema({
     size:{
-        Sizename:{
+        sizename:{
             type: String
         },
         category:[

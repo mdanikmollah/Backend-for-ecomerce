@@ -9,6 +9,8 @@ const createProduct = async(req,res)=>{
     try {
 
         const { title,slug,category,subcategory, } = req.body
+        console.log(req.body);
+        
         const { thumbnail } = req.files
         if ([title,category,subcategory].some((field) => field === "")) {
             return res.json(apiResponse(400,"all fields are required"))
@@ -63,6 +65,7 @@ const createProduct = async(req,res)=>{
         }
       }
         
+        console.log("u ok");
         
         product.title = title
         product.category = category
@@ -71,11 +74,64 @@ const createProduct = async(req,res)=>{
         product.thumbnail.imagePath = result.optimizeUrl
         product.thumbnail.public_Id = result.uploadResult.public_id
         await product.save()
+        console.log("samiya");
+        
         res.json(apiResponse(201,"product create",{product}))
     } catch (error) {
         console.log(error);
         
     }
+}
+
+const products = async (req, res) => {
+    try {
+        // const { search, category, priceMin, priceMax, sortBy } = req.query;
+        const { search, category, sortBy } = req.query;
+
+        let filter = {};
+
+        // Search by keyword
+        if (search) {
+            filter.$text = { $search: search };
+        }
+
+        // Filter by category
+        if (category) {
+            filter.category = category;
+        }
+
+        // Filter by price range
+        // if (priceMin || priceMax) {
+        //     filter.price = {};
+        //     if (priceMin) filter.price.$gte = Number(priceMin);
+        //     if (priceMax) filter.price.$lte = Number(priceMax);
+        // }
+
+        // Apply sorting
+        let sort = {};
+        if (sortBy) {
+            const [key, order] = sortBy.split(':'); // e.g., 'price:asc'
+            sort[key] = order === 'asc' ? 1 : -1;
+        }
+
+        // Execute the query
+        const products = await Product.find(filter).sort(sort).populate('category').populate('subcategory').populate('inventory');
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+const singleProduct = async (req, res) => {
+    const { slug } = req.params
+    const product = await Product.findOne({ slug }).populate('category').populate('subcategory').populate({
+        path: 'inventory',
+        populate: {
+            path: 'variation',
+            model: 'Variation'
+        }
+    })
+    return res.json({ product })
 }
 
 const deleteProduct = async(req,res)=>{
@@ -149,5 +205,5 @@ const pagination = async(req,res)=>{
     }
 }
 
-export { createProduct, deleteProduct, pagination }
+export { createProduct, deleteProduct, pagination, products, singleProduct }
 

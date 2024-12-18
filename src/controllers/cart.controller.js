@@ -1,5 +1,10 @@
 import apiResponse from "quick-response"
 import { Cart } from "../models/cart.Schema.js"
+import { api_key } from "../config/index.js"
+
+console.log(api_key);
+console.log("hdifhffik");
+
 
 
 
