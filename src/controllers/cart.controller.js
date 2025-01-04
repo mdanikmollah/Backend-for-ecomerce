@@ -2,8 +2,8 @@ import apiResponse from "quick-response"
 import { Cart } from "../models/cart.Schema.js"
 import { api_key } from "../config/index.js"
 
-console.log(api_key);
-console.log("hdifhffik");
+// console.log(api_key);
+// console.log("hdifhffik");
 
 
 
@@ -17,7 +17,7 @@ const createCart = async(req,res)=>{
         const isCart = await Cart.findOne({user,inventory}) 
         console.log(isCart);
         if (isCart) {
-            const cart = await Cart.findByIdAndUpdate({_id: isCart._id},{$inc: { quantity:1 }},{ new:true })
+            const cart = await Cart.findByIdAndUpdate({_id: isCart._id},{$inc: { quantity:quantity }},{ new:true })
             return res.json(apiResponse(201,"cart updated", {cart} )) 
         }else{
             const cart = await Cart.create({user,product,inventory,quantity})
@@ -49,4 +49,22 @@ const updateQuantity = async(req,res)=>{
     }
 }
 
-export {createCart,updateQuantity}
+const getCart = async(req,res)=>{
+  try {
+      const {userId} = req.params
+      const cart = await Cart.find({user: userId}).populate("product").populate({
+        path: 'inventory',
+        populate: {
+            path: 'variation',
+            model: 'Variation'
+        }
+    })
+      const total = cart.length
+      return res.json({cart, total})
+  } catch (error) {
+    console.log("anik",error);
+    
+  }
+}
+
+export {createCart,updateQuantity,getCart}

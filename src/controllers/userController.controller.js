@@ -85,6 +85,13 @@ const emailVerify = async (req,res) => {
    
 }
 
+const resendMail = async (req, res) => {
+   const { email } = req.body
+   const user = await User.findOne({ email })
+   const link = await user.generateAccessToken()
+   await mail(user.email, "verification", "hello", verificationTemplate(link))
+}
+
 const login = async(req,res)=>{
    try {
       const {email,password} = req.body
@@ -268,4 +275,4 @@ const forgotPassword = async (req, res) => {
    } catch (error) {}
  }
 
-export { createuser, emailVerify, login, logout, generateTokens, userUpdate, forgotPassword, resetPassword, updatePassword, getUser }
+export { createuser, emailVerify, login, logout, generateTokens, userUpdate, forgotPassword, resetPassword, updatePassword, getUser, resendMail }

@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import { dbUrl } from './../config/index.js'
 
-console.log("fdgdsgd");
+//console.log("fdgdsgd");
 
 
 const connectDb = async () => {

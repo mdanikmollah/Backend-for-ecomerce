@@ -2,7 +2,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { unlinkSync } from 'fs'
 import { cloud_name, api_key, api_secret } from "../config/index.js"
 
-console.log("aas");
+//console.log("aas");
 
 // Ensure the API secret is available
 if (!api_secret || !api_key || !cloud_name) {
