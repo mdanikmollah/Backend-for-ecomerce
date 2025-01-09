@@ -4,9 +4,12 @@ import { Shipping } from "../models/shipping.Schema.js"
 import { v4 as uuidv4 } from 'uuid';
 
 const createOrder = async(req,res)=>{
+   console.log(req.order);
+  
+   
    try {
      const { total,subTotal,name,address,city,district,postcode,phone,email,
-     shippingCost,paymentType,orderedProducts,isShipping,sname,saddress,scity,sdistrict,spostcode,sphone,semail } = req.body
+     shippingCost,paymentType,orderedProducts,isShipping,sname,saddress,scity,sdistrict,spostcode,sphone,semail } = req.order
      const orderId = uuidv4()
      const orderDeatils = new Order()
       if ([total,subTotal,name,address,city,district,postcode,phone,email,

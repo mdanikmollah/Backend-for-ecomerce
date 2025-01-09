@@ -23,6 +23,7 @@
     "nodemailer": "^6.9.15",
     "quick-app": "^2.0.3",
     "quick-response": "^1.0.5",
+    "sslcommerz-lts": "^1.1.0",
     "uuid": "^11.0.3"
   }
 }
